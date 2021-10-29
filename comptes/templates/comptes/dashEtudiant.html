@@ -1,0 +1,277 @@
+{% extends "comptes/layouts/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+<!-----------------------------------------Informations Adaptées aux Etudiants grace au block------------------------------>
+{% block title %}Tableau de Bord Etudiant-2.0{% endblock %}
+{% block self_css %}
+<link rel="stylesheet" href="{% static 'css/formulaire.css' %}"> 
+<link rel="stylesheet" href="{% static 'comptes/css/dashStudent.css' %}"> 
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+
+{% endblock %}
+{% block nav_right_element %}
+    
+    <li class="nav-item" role="presentation"><a class="nav-link active" href="{% url 'dashboardStudent' ' ' %}"><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'profileStudent' %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
+{% endblock %}
+{% block userName %} {{currentStudent.last_name}} {{currentStudent.first_name}}{% endblock %}
+{% block profile %}<a class="dropdown-item" role="presentation" href="{% url 'profileStudent' %}"><i class="fas fa-user mr-2 text-gray-400"></i>&nbsp;Profile</a>{% endblock %}
+{% block avatar%}<img class="border rounded-circle img-profile" src="{{currentStudent.avatar.url}}"> {% endblock %}
+
+{% block content %}
+
+
+    <div class="container-fluid pl-0 pr-0">
+        <div class="row mt-2 mb-2">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-dark mb-0 pl-5" id="titre"> Tableau de Bord</h4>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pl-0 pr-0 mt-2 mb-4">
+        <div class="row">
+            <div class="col-md-12">
+                <marquee behavior="scrool" direction="left"> <span class="text-uppercase font-weight-bold"> Les dates limites de depots de memoires dependent de votre universite. Veuillez bien consulter cette date avant d'effectuer votre depot.</span></marquee>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-primary py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span> Depots de Memoire Total | {{currentAcad}}</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>
+                                        {% if total < 10 %}
+                                            0{{total}}
+                                        {% else %}
+                                            {{total}}
+                                        {% endif %} 
+                                    </span>                                
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-box fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-success py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Depots valides | {{currentAcad}} </span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>
+                                        {% if valid < 10 %}
+                                            0{{valid}}
+                                        {% else %}
+                                            {{valid}}
+                                        {% endif %} 
+                                    </span>
+                                
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-check fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-info py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>Depots en attente de validation | {{currentAcad}}</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0 mr-3">
+                                    <span>
+                                        {% if no_valid < 10 %}
+                                            0{{no_valid}}
+                                        {% else %}
+                                            {{no_valid}}
+                                        {% endif %} 
+                                    </span>
+                                
+                                </div>        
+                                
+                            </div>
+                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div> 
+
+    {% if lenM == 0 %}
+        <section id="card-radius" class="mt-3">
+            <div class="container pb-2 mt-3 mb-5">
+                <div class="row justify-content-center align-content-center">
+                    <div class="col-md-8">
+                        <h3 class="text-center">Aucun dépôt de mémoire</h3>
+                        <p class="mt-4 mb-4 text-center">{{currentStudent.first_name}}, vous n'avez encore effectué aucun dépôt mémoire. Un dépôt ne prend généralement que quelques minutes.</p>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-content-center mt-4">
+                    
+                    <div class="col-md-4 col-lg-4">
+                    
+                        <div class="uk-card uk-card-default uk-card-body card-radius-item">
+                            <h3 class="uk-card-title">Pour les monomes</h3>
+                            <p class="text-center">Si vous êtes seul pour votre soutenance, veuillez cliquer sur le bouton ci-dessous pour effectuer votre premier dépôt.</p>
+                            <p class="text-center mt-4"><a href="{% url 'depositOne' %}" class="deposit-link">Commencer</a></p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-4">
+
+                        <div class="uk-card uk-card-default uk-card-body card-radius-item" >
+                            <h3 class="uk-card-title">Pour les binomes</h3>
+                            <p class="text-center">Si vous n'êtes pas seul pour votre soutenance, veuillez cliquer sur le bouton ci-dessous pour effectuer votre premier dépôt.</p>
+                            <p class="text-center mt-4 "><a href="{% url 'depositTwo' %}" class="deposit-link">Commencer</a></p>
+                        </div>
+                        
+                    </div>        
+                </div>
+            </div>
+        </section>
+    {% else %}
+         
+        <div class="container-fluid pl-0 pr-0 " id="card-upload">            
+            <div class="row justify-content-center align-content-center" style="margin: 0;">
+                <div class="col-md-6 col-sm-7 col-10 col-xl-3 mb-4">
+                    <div class="card shadow pt-2 pb-2" style="border-radius: 13px;">
+                        <div class="card-body">                       
+                            <div class="text-center font-weight-bold text-md mb-1 text-dark text-uppercase" ><span >Ajout de memoire</span></div>
+                            <p class="text-center mt-4 "><a class="" href="#modal-left" uk-toggle >Nouveau Dépôt</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        
+        <div class="container-fluid mt-4">
+            <div class="row justify-content-center align-content-center">
+                <div class="col-lg-10 col-xl-10">
+                    <div class="card shadow mb-4">
+                        <div class="card-header d-flex justify-content-between text-primary text-uppercase font-weight-bold align-items-center pt-4 pb-4">Tous mes memoires | {{currentAcad}}</div>
+                        <div class="card-body justify-content-center align-content-center" id="card-memoire">
+                            
+                                <table>
+                                    <tr>
+                                        <th>Thème du Mémoire</th> 
+                                        <th class="hide_table">Validation du dépôt de mémoire</th> 
+                                        <th class="hide_table">Date et heure de soutenance</th> 
+                                        <th class="hide_table">Jury</th>
+                                        <th class="hide_table">Salle de soutenance</th>
+                                                                           
+                                    </tr>
+                                    {%for studentMemoire in studentmemoires %}
+                                    <tr>
+                                        <td><a href="{% url 'viewStudent' studentMemoire.code_memoire  %}">{{studentMemoire.topic}}</a></td>
+                                        <td class="hide_table">
+                                            {% if studentMemoire.stateBefore == False %}
+                                                <span class="statusFalse">En attente</span>
+                                            {% else %}
+                                            <span class="text-success">Validé</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="hide_table">
+                                            {% if studentMemoire.checkSoutenance == False %}
+                                                <span>Non définie</span>
+                                            {% else %}
+                                                <span>{{studentMemoire.get_soutenance.date_planned.date}} à {{studentMemoire.get_soutenance.date_planned.time}} </span>
+                                            {% endif %}
+                                        </td>
+                                        
+                                        <td class="hide_table">
+                                            {% if studentMemoire.checkSoutenance == False  %}
+                                                <span>Non définie</span>
+                                            {% else %}
+                                                <span>N° {{studentMemoire.get_soutenance.jury_number}}</span>
+                                            {% endif %}
+                                        </td> 
+
+                                        <td class="hide_table">
+                                            {% if studentMemoire.checkSoutenance == False  %}
+                                                <span>Non définie</span>
+                                            {% else %}
+                                                <span>{{studentMemoire.get_soutenance.place}}</span>
+                                            {% endif %}
+                                        </td> 
+                                    </tr>
+                                    {% endfor%}
+                                </table>                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    
+    
+    {% endif %}
+    <!---------------------------------------------------Card Modal --------------------------------------------------------------->    
+    <div id="modal-left" class=" text-center" uk-modal >
+        <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="border-radius: 9px; border:4px solid">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <section id="card-radius" class="mt-3">               
+                    <div class="row justify-content-center align-content-center">
+                        <div class="col-md-8">
+                            <h3 class="text-center">Effectuer un nouveau Dépôt</h3>
+                            <p class="mt-4 mb-4 text-center">{{currentStudent.first_name}}, vous devez choisir l'une de ces options pour déposer votre nouveau mémoire.</p>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center align-content-center mt-4" uk-grid uk-scrollspy="cls: uk-animation-slide-top; target: .uk-card; delay: 300; repeat: false">                       
+                        <div class="col-md-8">                        
+                            <div class="uk-card uk-card-default uk-card-body card-radius-item">
+                                <h3 class="uk-card-title">Pour les monomes</h3>
+                                <p class="text-center">Si vous êtes seul pour votre soutenance, veuillez cliquer sur le bouton ci-dessous pour démarrer votre dépôt.</p>
+                                <p class="text-center mt-4"><a href="{% url 'depositOne' %}" class="deposit-link">Démarrer</a></p>
+                            </div>
+                        </div>                           
+                    </div>
+
+                    <div class="row justify-content-center align-content-center mt-4" uk-grid uk-scrollspy="cls: uk-animation-slide-bottom; target: .uk-card; delay: 300; repeat: false">                        
+                        <div class="col-md-8">
+                            <div class="uk-card uk-card-default uk-card-body card-radius-item" >
+                                <h3 class="uk-card-title">Pour les binomes</h3>
+                                <p class="text-center">Si vous n'êtes pas seul pour votre soutenance, veuillez cliquer sur le bouton ci-dessous pour démarrer votre dépôt.</p>
+                                <p class="text-center mt-4 "><a href="{% url 'depositTwo' %}" class="deposit-link">Démarrer</a></p>
+                            </div>                            
+                        </div>                        
+                    </div>
+            </section>            
+        </div>
+    </div>
+    {% if alertMessage != "" %}
+        <p class="d-none" id="message">{{alertMessage}} </p>
+    {% endif%}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+    <script src="{% static 'comptes/js/elements.js' %}"></script>  
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+
+    <script>
+        var message = document.getElementById("message")
+        if(message != null){
+            alertify.set('notifier', 'position','bottom-left')
+            alertify.success(message.innerHTML);
+        }
+        
+    </script>
+{% endblock %}
+
+    
+
+
+
+    

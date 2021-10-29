@@ -1,0 +1,28 @@
+#tabletitle{
+color: #0F559B;
+  font-weight: bold;
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+}
+
+button.dt-button{
+    border: 1px solid ;
+    background-color:#0F559B ;
+    color: white;
+    border-radius: 5px;
+    -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+button.dt-button:hover{
+    border: 1px solid #0F559B;
+    color:#0F559B ;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.dataTables_paginate .paginate_button:hover{
+    background: none !important;
+    border: none !important;
+}

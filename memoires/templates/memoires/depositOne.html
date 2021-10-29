@@ -1,0 +1,91 @@
+{% extends "comptes/dashEtudiant.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Dépôt Monome Etudiant-2.0{% endblock %}
+{% block self_css %}
+<link rel="stylesheet" href="{% static 'memoires/files.css' %}"> 
+<link rel="stylesheet" href="{% static 'css/formulaire.css' %}">
+ 
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+
+{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row mt-2 mb-2">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-dark mb-0 pl-5" id="titre"> Dépôt de mémoire </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-4 mb-5">
+        <div class="row justify-content-center align-content-center">                   
+            <div class="col-md-6">
+                <div class="card shadow py-2 bg-white" id="formulaire">
+                    <div class="card-body">                                    
+                        <div><p class="para-center mb-4">Effectuer un nouveau depot</p></div>
+                        <form method="post" id="studentForm" enctype="multipart/form-data" data-faculty-url="{% url 'ajax_load_ecole' %}" data-entity-url="{% url 'ajax_load_filiere' %}" data-options-url="{% url 'ajax_load_options' %}">
+                            {% csrf_token %}
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">{{ form.university|as_crispy_field}}</div>
+                                <div class="col-sm-6">{{ form.ecole|as_crispy_field}}</div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">{{ form.filiere|as_crispy_field}}</div>
+                                <div class="col-sm-6">{{ form.option|as_crispy_field}}</div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">{{ form.topic|as_crispy_field}}</div>
+                                <div class="col-sm-6 mb-3 mb-sm-0">{{ form.supervisor|as_crispy_field}}</div>
+                            </div>      
+                            <div class="form-group row  justify-content-center align-content-center">
+                                <div class="col-sm-6 mb-3 mb-sm-0 text-center">{{ form.document|as_crispy_field}}</div>
+                                
+                            </div>         
+                            
+                            <div class="text-center">
+                                <input type="submit" value="Enregistrer" id="submit">
+                            </div>
+                            <div class="text-center mt-2"><a class="small" href="{% url 'depositTwo' %}">Vous êtes plutôt un couple d'étudiants ? Cliquer ici</a></div>
+                        </form>     
+                                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if errorMessage != "" %}
+        <p class="errorMessage d-none" id="error">{{errorMessage}} </p>
+    {% endif%}
+
+    {% if errordetection != "" %}
+        <p class="errorMessage d-none" id="errorDet">{{errordetection}} </p>
+    {% endif%}
+                                
+<script src="{% static 'alertify/alertify.min.js' %}"></script>
+
+
+=
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{% static 'comptes/js/elements.js' %}"></script>                                 
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+
+    
+    <script>
+        var errorMessage = document.getElementById("error")
+        if(errorMessage != null){
+            alertify.set('notifier', 'position','bottom-center')
+            alertify.error(errorMessage.innerHTML);
+        }
+
+        var errorDetection = document.getElementById("errorDet")
+        if(errorDetection != null){
+            alertify.alert("e-Memoire","Détetion de plagiat pour poucentage de " + errorDetection.innerHTML)
+        }
+
+    </script>
+{% endblock%}

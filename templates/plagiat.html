@@ -1,0 +1,70 @@
+{% extends 'layouts/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block self_title %}<title>e-Memoire Connexion</title>{% endblock %}
+{% block self_css %}
+
+<link rel="stylesheet" href="{% static 'css/formulaire.css' %}">
+
+<link rel="stylesheet" href=" https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"> 
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+
+{% endblock %}
+
+{% block header%}
+    <section id="top" class="d-flex align-items-center">
+        
+        <div class="container mt-5 justify-content-center align-content-center">
+            <div class="row justify-content-center align-content-center">
+                
+                <div class="col-md-6">
+                    <div class="card shadow py-2 bg-white" id="formulaire">
+                        
+                        <div class="card-body pt-3 pb-3">                                    
+                                <h4 class="para-center">Connexion</h4>
+                                <form class="pt-3" method="post" action="{% url 'plagiat' %}" id="formulaire" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-group row  justify-content-center align-content-center">
+                                        <div class="col-sm-6 mb-3 mb-sm-0 text-center"><input type="file" name="myfile" > </div>
+                                        
+                                    </div>  
+                                    
+                                    <div class="text-center mt-4">
+                                        <input type="submit" value="Enregistrer" id="submit" >
+                                    </div>
+                                </form> 
+                                
+                                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    {% if errorMessage != "" %}
+        <p class="errorMessage d-none" id="error">{{errorMessage}} </p>
+    {% endif%}
+                                    
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+
+    
+    <script>
+        var errorMessage = document.getElementById("error")
+        if(errorMessage != null){
+            alertify.alert("e-Memoire","Détetion de plagiat pour poucentage de " + errorMessage.innerHTML)
+        }
+
+    </script>
+
+    
+{% endblock%}
+
+
+
+
+
+
+

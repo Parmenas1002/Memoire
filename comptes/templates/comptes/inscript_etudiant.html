@@ -1,0 +1,64 @@
+{% extends 'layouts/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block self_title %}<title>e-Memoire Inscription</title>{% endblock %}
+{% block self_css %}<link rel="stylesheet" href="{% static 'css/formulaire.css' %}"> 
+<link rel="stylesheet" href="{% static 'comptes/css/dashStudent.css' %}"> 
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+
+{% endblock %}
+
+{% block header%}
+    <section id="top" class="d-flex align-items-center mt-5">
+
+        <div class="container mt-5 justify-content-center align-content-center">
+            <div class="row justify-content-center align-content-center">
+                
+                <div class="col-md-6">
+                    <div class="card shadow py-2 bg-white" id="formulaire">
+                        <div class="card-body pt-3 pb-3">                                    
+                                <h4 class="para-center mb-4">Inscription des Etudiants</h4>
+                                <form method="post" action="{% url 'registerStudent' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">{{ form.name|as_crispy_field}}</div>
+                                        <div class="col-sm-6">{{ form.firstName|as_crispy_field}}</div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">{{ form.username|as_crispy_field}}</div>
+                                        <div class="col-sm-6">{{ form.email|as_crispy_field}}</div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">{{ form.password|as_crispy_field}}</div>
+                                        <div class="col-sm-6">{{ form.checkPassword|as_crispy_field}}</div>
+                                    </div>
+                                
+                                    <div class="text-center">
+                                        <input type="submit" value="S'inscrire" id="submit">
+                                    </div>
+                                </form>  
+                                
+                                <div class="text-center mt-3"> <span class="small">Vous avez déjà un compte ? </span> <a class="small" href="{% url 'loginUser' %}">Connectez vous</a></div>                  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+    {% if errorMessage != "" %}
+        <p class="d-none" id="error">{{errorMessage}} </p>
+    {% endif%}
+    
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+    <script>
+        var errorMessage = document.getElementById("error")
+        if(errorMessage != null){
+            alertify.set('notifier', 'position','bottom-center')
+            alertify.error(errorMessage.innerHTML);
+        }
+    </script>
+{% endblock%}
+

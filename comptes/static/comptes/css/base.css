@@ -1,0 +1,75 @@
+body
+{
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+}
+
+
+/*-----------------------------------------------------------------------------NavBar-----------------------------------------------------------------*/
+#nav_right, footer
+{
+    background-color: #0F559B;
+}
+
+
+
+@media screen and (max-width:660px)
+{
+  #titre
+  {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width:340px)
+{
+  #titre
+  {
+    font-size: 12px;
+  }
+}
+/*========================== Memory card==================*/
+
+#card-memoire table
+{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#card-memoire th
+{
+    font-weight: bold;
+}
+
+@media screen and (max-width:660px)
+{
+  #card-memoire .hide_table
+{
+  display: none;
+}
+}
+
+#card-memoire td,#card-memoire th
+{
+    border: 2px solid #dddddd;
+    text-align: center;
+}
+
+#card-memoire td p
+{
+    margin-bottom: 0px;
+}
+#card-memoire td .statusTrue
+{
+    color: green;
+    font-weight: bold;
+}
+
+
+/*=============================================================================Footer================================================================*/
+footer span
+{
+  color: white;
+  font-weight: bold;
+  width: 100%;
+}
+
+

@@ -1,0 +1,107 @@
+/*=====================La digitalisation*/
+#slogan h3
+{
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+    font-weight: bold;
+    color: black;
+
+}
+
+/*============== Quelques mémoires*/
+#view_more a
+{
+    border: 2px solid #0F559B;
+    text-align: center;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-weight: bold;
+    color: #0F559B;
+    -webkit-transition: all 0.4s;
+ -o-transition: all 0.4s;
+ -moz-transition: all 0.4s;
+ transition: all 0.4s;
+    
+}
+
+#view_more a:hover
+{
+  color: white;
+  background-color:#0F559B ;  
+  text-decoration: none;
+  opacity: 0.8;
+  
+}
+
+#card 
+{
+    border-radius: 5px;
+}
+
+#card h3
+{
+    color: #0F559B; 
+    font-size: 18px; 
+    font-weight: bold; 
+    text-align: center;
+}
+
+
+#card span
+{
+    font-size: 15px; 
+    text-align: center; 
+    color: #0F559B;
+}
+
+#card  p
+{
+    color: black;
+}
+
+#card  a
+{
+    text-decoration: none;
+    border: 1px solid #0F559B; 
+    padding: 10px; 
+    border-radius: 5px; 
+    color:#0F559B;
+}
+
+#card a:hover
+{
+    text-decoration: none;
+    border: 1px solid #0F559B; 
+    padding: 10px; 
+    border-radius: 5px; 
+    color:white;
+    opacity: 0.8;
+    background: #0F559B;
+}
+
+
+/* =============Services=============*/
+
+#services
+{
+    
+    background: #0F559B;
+    
+}
+
+
+
+#content-services h2
+{
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+#content-services p
+{
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+

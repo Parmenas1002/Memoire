@@ -1,0 +1,113 @@
+{% extends 'layouts/base.html' %}
+{% load static%}
+{% block self_css %}
+
+<link rel="stylesheet" href="{% static 'memoires/indexM.css' %}">
+{% endblock %}
+{% block header%}
+        <section id="top" class="d-flex align-items-center">
+            
+            <div class="container">
+                <div class="row justify-content-center align-content-center">
+                    <div class="col-lg-8 col-md-7 ">
+                        <h2 class="text-white text-center pt-5 mt-5 ">Tous les mémoires soutenus peuvent être consultés dès aujourd'hui !</h2>
+                        <div class="text-center pt-3">
+                            <form action="{% url 'memoire_index' %}" method="post" id="search_form">
+                                {% csrf_token %}
+                                <input type="search" name="search" id="search" placeholder="Rechercher un mémoire">
+                            </form>
+                        </div>
+                        
+                    </div>
+                
+                </div>
+            </div>
+    
+        </section>
+{% endblock%}
+{% block content%}
+
+    <div class="container-fluid bg-light pt-5 pb-5 mb-3 " >
+        <div class="row align-content-center justify-content-center " id="slogan">
+            <div class="col-md-3 ">
+                <h3 class="text-center" >Découvrez les travaux de fin d'études de toutes les universités</h3>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-5">
+                <p class="text-center mt-2">Nous mettons régulièrement à jour le contenu de cette page pour donner la posssibilité à tout usager d'avoir le meilleur contenu en terme de recherche universitaire au Bénin</p>
+                <p class="text-center"><button class="btn" id="view_more"><a  href="#view_regular" uk-scroll >Voir tous les mémoires</a></button></p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid  pt-2" >
+
+        <div class="row justify-content-center align-content-center" id="view_regular">
+            <div class="col-md-8 col-sm-11 col-11">
+
+    <!----------------------------------------------------Liste des Mémoires---------------------------------------------------------->    
+                {% for memoire in memoires %}
+                    <a href="{% url 'viewPublic' memoire.code_memoire %}" id="memoire_link">
+                        <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin mb-5 mt-3 " uk-grid uk-scrollspy="cls: uk-animation-slide-left; repeat: false" style="border-radius: 10px;">
+
+                            <div class="uk-card-media-left uk-cover-container" >
+                                <img src="{{ memoire.presentationImage.url }}" alt="" uk-cover >
+                                <canvas width="550" height="270"></canvas>
+                            </div>
+                            <div>
+                                <div class="uk-card-body" id="memoire-card-body">
+                                    <p class="entity-acad">{{memoire.filiere.entity}}-{{memoire.filiere}} | {{memoire.academicYear}}</p>
+                                    <h5 class="topic">{{memoire.topic}}</h5>
+                                    <p>
+                                        <span>Réalisé par : </span>    
+                                        <span class="student-memoire">{{memoire.etudiants }}</span>            
+                                    </p>
+                                    <p class="text-right">Encadré par : <span class="supervisor">{{memoire.supervisor}}</span> </p>    
+                                </div>
+                            </div>        
+                        </div>
+                    </a>    
+                {% empty %}
+                <p class="text-center">Nous n'avons encore ajouté aucun mémoire sur notre plateforme </p>
+                {% endfor %}    
+                    
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6 text-center">
+                <nav class="d-lg-flex justify-content-lg-center dataTables_paginate paging_simple_numbers">
+                    <ul class="pagination">
+                        {% if memoires.has_previous %}
+                            <li class="page-item"><a class="page-link" aria-label="Previous" href="{% url 'memoire_index' %}?page={{ memoires.previous_page_number }}#view_regular"><span aria-hidden="true">«</span></a></li>
+                            
+                        {% else %}
+                            <li class="page-item disabled"><a class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                        {% endif %}
+                        {% for i in memoires.paginator.page_range %}
+                            {% if memoires.number == i %}
+                                <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                                
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="{% url 'memoire_index' %}?page={{ i }}#view_regular">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if memoires.has_next %}
+                            
+                            <li class="page-item"><a class="page-link" href="{% url 'memoire_index' %}?page={{ memoires.next_page_number }}#view_regular" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                        {% else %}
+                            <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                        {% endif %}
+                        
+                    </ul>
+                </nav>
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,276 @@
+{% extends "comptes/layouts/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+<!-----------------------------------------Informations Adaptées aux Etudiants grace au block------------------------------>
+{% block title %}Tableau de Bord Agent-2.0{% endblock %}
+{% block self_css %}<link rel="stylesheet" href="{% static 'css/formulaire.css' %}">
+<link rel="stylesheet" href="{% static 'comptes/css/dashAgent.css' %}"> 
+
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+
+{% endblock %}
+
+{% block nav_right_element %}
+    
+    <li class="nav-item" role="presentation"><a class="nav-link active" href="{% url 'dashboardAgent' %}"><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'listTeacher' %}"><i class="fas fa-list"></i><span>Liste des enseignants</span></a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'listSoutenance' %}"><i class="fas fa-list"></i><span>Liste des soutenances</span></a></li>
+    
+{% endblock %}
+{% block userName %} {{user.username}} | {{currentAgent.ecole.name}} {% endblock %}
+
+{% block content %}
+
+
+    <div class="container-fluid pl-0 pr-0">
+        <div class="row mt-2 mb-2">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-dark mb-0 pl-5" id="titre"> Tableau de Bord</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-primary py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span> Depot de Memoire Total | {{currentAcad}}</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>
+                                        {% if total < 10 %}
+                                            0{{total}}
+                                        {% else %}
+                                            {{total}}
+                                        {% endif %} 
+                                    </span>
+                                
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-box fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-success py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Depots valides | {{currentAcad}} </span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>
+                                        {% if valid < 10 %}
+                                            0{{valid}}
+                                        {% else %}
+                                            {{valid}}
+                                        {% endif %} 
+                                    </span>
+                                
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-check fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-info py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>Depot en attente de validation | {{currentAcad}}</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0 mr-3">
+                                    <span>
+                                        {% if no_valid < 10 %}
+                                            0{{no_valid}}
+                                        {% else %}
+                                            {{no_valid}}
+                                        {% endif %} 
+                                    </span>
+                                
+                                </div>        
+                                
+                            </div>
+                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center align-content-center">
+
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-danger py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                {% if currentDepositDay != None  %}
+                                    <div class="text-uppercase font-weight-bold text-xs mb-1"><span>Nouvelle date limite de depot</span></div>
+                                    <div class="row no-gutters align-items-center justify-content-center pt-2">
+                                        <div class="col-auto text-center">
+                                            <div class="text-dark font-weight-bold h6 mb-0 mr-3"><span>Date actuelle : {{currentDepositDay.date}}</span></div>
+                                        </div>   
+                                        
+                                    </div>
+                                {% else %}
+                                    <div class="text-uppercase font-weight-bold text-xs mb-1"><span>Ajoutez la date limite de depot</span></div>
+                                {% endif %}
+                                
+                                <div class="row justify-content-center align-content-center pt-3">
+                                    <form method="post" action="{% url 'dashboardAgent' %}" id="formulaire" >
+                                        {% csrf_token %}
+                                        <input type="date" name="depositDate" id="" required>        
+                                         
+                                        {% if errorMessage != "" %}
+                                            <p class="errorMessage">{{errorMessage}}</p>
+                                        {% endif%}
+                                        <div class="text-center">
+                                            <input type="submit" value="Enregistrer" id="submit" name = "depSubmit">
+                                        </div>
+                                    </form> 
+
+                                </div>
+                                
+                                
+                            </div>
+                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="container-fluid pl-0 pr-0">
+        <div class="row mt-5 mb-3 justify-content-center align-content-center">
+            <div class="col-md-12 text-center">
+                <h4 class="text-uppercase font-weight-bold" id="tabletitle">Depots de memoires | Annee Academique  {{currentAcad}}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mb-4">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Thème</th>
+                            <th>Etudiant(s)</th>
+                            <th>Filière</th>
+                            <th>Option</th>
+                            <th>Superviseur</th>
+                            <th>Validation du dépôt</th>
+                            <th>Code Mémoire</th>
+                            <th>Dépôt annulé</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for memoire in memoires %}
+                            <tr>
+                                <td><a href="{% url 'viewAgent' memoire.code_memoire %}">{{memoire.topic}}</a></td>
+                                <td>{{memoire.get_student_mat}}</td>
+                                <td>{{memoire.filiere}}</td>
+                                <td>
+                                    {% if memoire.option != None %}
+                                        <span >{{memoire.option.name}}</span>
+                                    {% else %}
+                                        <span>Aucune Option </span>
+                                    {% endif %}
+                                    
+                                </td>
+                                <td>{{memoire.supervisor}}</td>
+                                <td>
+                                    {% if memoire.stateBefore == False %}
+                                    <span >En attente</span>
+                                        
+                                    {% else %}
+                                    <span class="text-success">Validé</span>
+                                       
+                                    {% endif %}
+                                </td>
+                                <td>{{memoire.code_memoire}}</td>
+                                <td>{% if memoire.activate == True %}
+                                    <span class="text-success">Non</span>
+                                        
+                                    {% else %}
+                                    <span class="text-danger">Oui</span>    
+                                    {% endif %}
+                                </td>
+                                
+                            </tr>
+                        {% endfor %}
+                    
+                    </tbody>
+                    
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+    
+    {% if successMessage != "" %}
+        <p class="d-none" id="message">{{successMessage}} </p>
+    {% endif%}
+    
+    <script>
+        var message = document.getElementById("message")
+        if(message != null){
+            alertify.set('notifier', 'position','bottom-center')
+            alertify.success(message.innerHTML);
+        }
+        $(document).ready(function() {
+            $('#example').DataTable({
+                "searching":true,
+                "paging":true,
+                responsive: true,
+                dom: 'Bfrtip',
+                buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Liste des mémoires'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Liste des mémoires'
+                },
+
+                {
+                    extend: 'csvHtml5',
+                    title: 'Liste des mémoires'
+                }
+                ],
+                
+                "language":{
+                    "emptyTable": "Aucun dépôt de mémoire",
+                    "infoEmpty": "Aucun mémoire trouvé",
+                    "zeroRecords": "Aucun mémoire trouvé",
+                    "info": "Page _PAGE_ sur _PAGES_",
+                    "infoFiltered": "(Filtre sur _MAX_ mémoire (s))",
+                    "search" :"Rechercher  ",
+                    "paginate" :{
+                        "first":"Premier",
+                        "last" : "Dernier",
+                        "next" : "Suivant",
+                        "previous": "Précédent",
+                    }
+                }
+            });
+        } );
+
+        
+    </script> 
+
+{% endblock %}
+

@@ -1,0 +1,189 @@
+{% extends "comptes/layouts/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+<!-----------------------------------------Informations Adaptées aux Etudiants grace au block------------------------------>
+{% block nav_right_element %}
+
+    <li class="nav-item" role="presentation"><a class="nav-link active" href="{% url 'dashboardTeacher' ' ' %}"><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'profileTeacher' %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
+    
+{% endblock %}
+{% block self_css %}
+<link rel="stylesheet" href="{% static 'accounts/teachBoard.css' %}"> 
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+
+{% endblock %}
+{% block userName %}  {{currentTeacher.first_name}} {{currentTeacher.last_name}}{% endblock %}
+{% block avatar%}<img class="border rounded-circle img-profile" src="{{currentTeacher.avatar.url}}"> {% endblock %}
+{% block profile %}<a class="dropdown-item" role="presentation" href="{% url 'profileTeacher' %}"><i class="fas fa-user mr-2 text-gray-400"></i>&nbsp;Profile</a>{% endblock %}
+
+
+{% block content %}
+    
+    <div class="container-fluid">
+        <div class="row mt-2 mb-2">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-dark mb-0 pl-5" id="titre">Tableau de Bord</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-primary py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span> Soutenances Total | {{currentAcad}}</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>
+                                        {% if total < 10 %}
+                                            0{{total}}
+                                        {% else %}
+                                            {{total}}
+                                        {% endif %} 
+                                    </span>                                
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-box fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-success py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Soutenances valides | {{currentAcad}} </span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>
+                                        {% if valid < 10 %}
+                                            0{{valid}}
+                                        {% else %}
+                                            {{valid}}
+                                        {% endif %} 
+                                    </span>
+                                
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-check fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-info py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>Soutenances en attente de validation | {{currentAcad}}</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0 mr-3">
+                                    <span>
+                                        {% if no_valid < 10 %}
+                                            0{{no_valid}}
+                                        {% else %}
+                                            {{no_valid}}
+                                        {% endif %} 
+                                    </span>
+                                
+                                </div>        
+                                
+                            </div>
+                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div> 
+
+    <div class="container-fluid" id="card-upload">            
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6 col-sm-7 col-10 col-xl-3 mb-4">
+                <div class="card shadow pt-2 pb-2" style="border-radius: 13px;">
+                    <div class="card-body">
+                        
+                        <div class="text-center font-weight-bold text-md mb-1 text-dark" ><span style="color: #0F559B;"  >Année Académique</span></div>
+                        <div class="text-center font-weight-bold text-md mb-1 text-dark" ><span >{{currentAcad}}</span></div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>            
+    </div>
+    {% if exist_memoire == True %}
+        <div class="container-fluid mt-4">
+            <div class="row justify-content-center align-content-center">
+                <div class="col-lg-10 col-xl-10">
+                    <div class="card shadow mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="font-weight-bold m-0" id="titleCard">Tous les mémoires</h6>
+                            
+                        </div>
+                        <div class="card-body justify-content-center align-content-center" id="card-memoire">
+                            
+                                <table>
+                                    <tr>
+                                        <th>Thème du Mémoire</th>
+                                        <th class="hide_table">Etudiants</th>
+                                        <th class="hide_table">Filière</th> 
+                                        <th>Jury</th>    
+                                        <th>Role dans le Jury</th>                              
+                                        <th>Date et heure de soutenance</th>
+                                        <th class="hide_table">Salle de soutenance</th>
+                                    </tr>
+                                    {% for role in roles %}
+                                    <tr>
+                                        <td><a href="{% url 'viewTeacher' role.soutenance.memoire.code_memoire %}">{{role.soutenance.memoire.topic}}</a></td>
+                                        <td class="hide_table">
+                                            {{role.soutenance.memoire.etudiants}}
+                                                
+                                        </td>
+                                        <td class="hide_table">{{role.soutenance.memoire.filiere.entity}}-{{role.soutenance.memoire.filiere.name}}</td>
+                                        <td>N° {{role.soutenance.jury_number}}</td>
+                                        <th><span class="text-success font-weight-normal">{{role.get_role_display}}</span></th>
+                                        <td >
+                                            {{role.soutenance.date_planned.date}} à {{role.soutenance.date_planned.time}}
+                                        </td>
+                                        <td class="hide_table">
+                                            {{role.soutenance.place}}
+                                        </td>
+                                    </tr>
+                                    {% endfor%}
+                                </table>                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+    <div class="container mt-2">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6">
+                <p class="text-center" style="color: #0F559B;">Aucun mémoire n'a encore été assigné à votre profil au cours de cette année. Si vous pensez que c'est une erreur veuillez vous rapprocher de notre équipe.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if alertMessage != "" %}
+        <p class="d-none" id="message">{{alertMessage}} </p>
+    {% endif%}
+    
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+
+    <script>
+        var message = document.getElementById("message")
+        if(message != null){
+            alertify.set('notifier', 'position','bottom-left')
+            alertify.success(message.innerHTML);
+        }
+    </script>
+    
+    
+{% endblock %}

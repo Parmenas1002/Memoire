@@ -1,0 +1,117 @@
+
+/*===========================================Formulaire de choix de filière====================================================*/
+#link_cursor
+{
+    cursor: default ;
+}
+
+
+/*--------------------------------------------------------------
+#  Section Mémoire non finalisé
+--------------------------------------------------------------*/
+
+#card-radius .card-radius-item
+{
+  border-radius: 9px;
+}
+
+#card-radius h3
+{
+  color: #0F559B;
+  font-weight: bold;
+}
+
+#card-radius .uk-card-title
+{
+  text-align: center;
+  border-radius: 7px;
+  border : 1px solid #0F559B;
+  background-color: #0F559B;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 3px;
+  text-transform: uppercase;
+}
+
+#card-radius .deposit-link 
+{
+  text-decoration: none;
+  padding: 7px;
+  color: #0F559B;
+  border: 1px solid #0F559B;
+  font-weight: bold;
+  border-radius: 5px;
+  -webkit-transition: all 0.4s;
+ -o-transition: all 0.4s;
+ -moz-transition: all 0.4s;
+ transition: all 0.4s;
+}
+
+#card-radius .deposit-link:hover
+{
+  text-decoration: none;
+  padding: 7px;
+  color: white;
+  background-color:#0F559B ;  
+  border: 1px solid #0F559B; 
+  
+}
+
+/* ==========Déposer un nouveau mémoire=============*/
+
+#card-upload a
+{
+
+  color: #0F559B;
+  text-transform: capitalize;
+  border: 1px solid #0F559B;
+  font-weight: bold;
+  border-radius: 5px;
+  -webkit-transition: all 0.4s;
+ -o-transition: all 0.4s;
+ -moz-transition: all 0.4s;
+ transition: all 0.4s;
+ padding: 5px 10px;
+
+}
+
+@media screen and (max-width:365px) {
+  
+  #card-upload a
+  {
+    font-weight: 300;
+    font-size: 15px;
+  }
+
+  #card-upload span
+  {
+    font-weight: 300;
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width:335px) {
+  
+  #card-upload a
+  {
+    font-weight: 300;
+    font-size: 12px;
+  }
+
+  #card-upload span
+  {
+    font-weight: 300;
+    font-size: 12px;
+  }
+
+}
+
+#card-upload a:hover
+{
+  color: white;
+  background-color:#0F559B ;  
+  border: 1px solid #0F559B; 
+  opacity: 0.8;
+  text-decoration: none;
+}

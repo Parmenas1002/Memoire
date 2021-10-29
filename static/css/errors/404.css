@@ -1,0 +1,30 @@
+/* =========================================Font ========================================================*/
+
+@font-face 
+{
+  font-family: 'Roboto';
+  src: url('../../font/RobotoSlab-Regular.ttf');
+}
+
+.container-alert h3
+{
+    color: red;
+    font-family: 'Roboto',Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    
+}
+
+.container-alert p
+{
+    text-align: justify;
+    font-family: 'Roboto',Arial, Helvetica, sans-serif;
+    
+}
+
+.iconify
+{
+    color: red;
+    width: 40px;
+    height: 40px;
+    margin-right: 2%;
+}

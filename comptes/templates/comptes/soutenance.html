@@ -1,0 +1,169 @@
+{% extends "comptes/dashAgent.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Liste des Soutenances{% endblock %}
+{% block self_css %}
+<link rel="stylesheet" href="{% static 'comptes/css/dashAgent.css' %}"> 
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/formulaire.css' %}">
+{% endblock %}
+
+{% block nav_right_element %}  
+    <li class="nav-item" role="presentation"><a class="nav-link " href="{% url 'dashboardAgent' %}"><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'listTeacher' %}"><i class="fas fa-list"></i><span>Liste des enseignants</span></a></li> 
+    <li class="nav-item" role="presentation"><a class="nav-link active" href="{% url 'listSoutenance' %}"><i class="fas fa-list"></i><span>Liste des soutenances</span></a></li>  
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid pl-0 pr-0">
+        <div class="row mt-2 mb-2">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-dark mb-0 pl-5" id="titre">Soutenances</h4>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card shadow border-left-danger py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                {% if currentDepositDay != None  %}
+                                    <div class="text-uppercase font-weight-bold text-xs mb-1"><span>Nouvelle date limite de depot</span></div>
+                                    <div class="row no-gutters align-items-center justify-content-center pt-2">
+                                        <div class="col-auto text-center">
+                                            <div class="text-dark font-weight-bold h6 mb-0 mr-3"><span>Date actuelle : {{currentDepositDay.date}}</span></div>
+                                        </div>   
+                                        
+                                    </div>
+                                {% else %}
+                                    <div class="text-uppercase font-weight-bold text-xs mb-1"><span>Ajoutez un fichier de soutenance</span></div>
+                                {% endif %}
+                                
+                                <div class="row justify-content-center align-content-center pt-3">
+                                    <form class="pt-3" method="post" action="{% url 'listSoutenance' %}" id="formulaire" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-group row  justify-content-center align-content-center">
+                                            <div class="col-sm-6 mb-3 mb-sm-0 text-center"><input type="file" name="myfile" > </div>
+                                            
+                                        </div>  
+                                        
+                                        <div class="text-center mt-4">
+                                            <input type="submit" value="Enregistrer" id="submit" >
+                                        </div>
+                                    </form> 
+
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mb-4">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Nom et prénoms</th>
+                            <th>Thèmes de soutenance</th>
+                            <th> Date et Heure de passage</th>
+                            <th>Jury</th>
+                            <th>Salle</th>    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for soutenance in soutenances %}
+                            <tr>
+                                <td>{{soutenance.memoire.etudiants}}</td>
+                                <td>{{soutenance.memoire.topic}}</td>
+                                <td>{{soutenance.date_planned.date}} à {{soutenance.date_planned.time}}</td>
+                                <td>{{soutenance.jury_number}}</td>
+                                <td> {{soutenance.place}} </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody> 
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+    {% if errorMessage != "" %}
+        <p class="d-none" id="error">{{errorMessage}} </p>
+    {% endif%}
+    {% if successMesage != "" %}
+        
+        <p class="d-none" id="message">{{successMesage}} </p>
+    {% endif%}
+      
+    <script src="{% static 'comptes/js/elements.js' %}"></script>  
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+    
+    <script>
+        var errorMessage = document.getElementById("error")
+        if(errorMessage != null){
+            alertify.set('notifier', 'position','bottom-center')
+            alertify.error(errorMessage.innerHTML);
+        }
+        
+        var message = document.getElementById("message")
+        if(message != null){
+            alertify.set('notifier', 'position','bottom-center')
+            alertify.success(message.innerHTML);
+        }
+    
+        $(document).ready(function() {
+            $('#example').DataTable({
+                "searching":true,
+                "paging":true,
+                responsive: true,
+                dom: 'Bfrtip',
+                buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Liste des soutenances'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Liste des soutenances'
+                },
+
+                {
+                    extend: 'csvHtml5',
+                    title: 'Liste des soutenances'
+                }
+                ],
+                
+                "language":{
+                    "emptyTable": "Aucune soutenance",
+                    "infoEmpty": "Aucun doutenance",
+                    "zeroRecords": "Aucun soutenance",
+                    "info": "Page _PAGE_ sur _PAGES_",
+                    "infoFiltered": "(Filtre sur _MAX_ mémoire (s))",
+                    "search" :"Rechercher  ",
+                    "paginate" :{
+                        "first":"Premier",
+                        "last" : "Dernier",
+                        "next" : "Suivant",
+                        "previous": "Précédent",
+                    }
+                }
+            });
+        } );
+
+        
+    </script> 
+
+{% endblock %}

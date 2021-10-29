@@ -1,0 +1,116 @@
+#formulaire .para-center
+{
+  color: #0F559B;
+  font-weight: bold;
+  text-align:center ; 
+  text-transform: uppercase;  
+  font-family: Georgia, 'Times New Roman', Times, serif !important;  
+}
+#top
+{
+    width: 100%;
+    height: 75vh; 
+    margin-top: 116px !important;
+    margin-bottom: 40px;
+}
+
+@media screen and (max-width:575px)
+{
+    #top
+    {
+        margin-top: 310px !important;
+        margin-bottom: 200px;
+    }
+}
+
+@media screen and (max-width:322px)
+{
+    #top
+    {
+        margin-top: 330px !important;
+        margin-bottom: 210px;
+    }
+}
+
+@media screen and (max-width:295px)
+{
+    #top
+    {
+        margin-top: 360px !important;
+        margin-bottom: 230px;
+    }
+}
+@media screen and (max-width:250px)
+{
+    #top
+    {
+        margin-top: 400px !important;
+        margin-bottom: 250px;
+    }
+}
+
+.form-control-file
+{
+    padding-top: 10px;
+    
+}
+
+
+.form-control:focus
+{
+    border: 1px solid rgba(0, 0, 0, 0.5) !important;
+  box-shadow: none !important;
+}
+
+.form-control
+{
+  border: 2px solid lightgray !important;
+  
+}
+
+.asteriskField
+{
+  color:red;
+  margin-left: 5px;
+}
+
+#formulaire .errorMessage
+{
+  color: red;
+  text-align: center;
+}
+
+#formulaire #submit
+{
+ 
+ text-align: center;
+ border-radius: 5px;
+ font-weight: bold; 
+ font-size: 14px;
+ line-height: 1.2;
+ text-transform: uppercase;
+ padding: 10px;
+
+ -webkit-transition: all 0.4s;
+ -o-transition: all 0.4s;
+ -moz-transition: all 0.4s;
+ transition: all 0.4s;
+ background-color: white;
+ color: #0F559B;
+ border: 2px solid #0F559B;
+ box-shadow: 1px 1px 2px 0px white;
+
+  
+}
+
+#formulaire #submit:hover {
+    color: white;
+    background-color:#0F559B ;  
+    border: 2px solid #0F559B; 
+    box-shadow: 2px 2px 2px 0px black;   
+}
+
+#formulaire ul
+{
+    display: none;
+}

@@ -1,0 +1,29 @@
+#titleCard
+{
+  color: #0F559B;
+}
+
+.title
+{
+  font-weight: bold;
+  text-decoration: underline;
+  color: #0F559B;
+  letter-spacing: 1px;
+}
+
+#document .link
+{
+  color: #0F559B;
+  border: 1px solid #0F559B;
+  padding: 3px 3px;
+  border-radius: 5px;
+  
+}
+
+#document .link:hover
+{
+  color: #0F559B;
+  text-decoration: none;
+  border: 1px solid black;
+  
+}

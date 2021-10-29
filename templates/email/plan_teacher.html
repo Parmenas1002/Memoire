@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignation</title>
+    <style>
+        #link a
+        {
+            color: #0275d8;
+            text-decoration: underline;  
+        }
+
+        #link 
+        {
+            padding-top: 8px;
+        }
+    </style>
+    
+</head>
+<body>
+    
+    <h2>Bonjour M/Mme {{currentUser.first_name}} {{currentUser.last_name}} </h2>
+    <p style="text-align: justify;">Nous venons par ce présent vous informer que la planification des soutenances pour le compte de cette année académique {{cAcad.titre}} est déja disponible sur notre plateforme.</p> 
+    <p id="link"> <a href="http://192.168.43.144:8000/comptes/connexion-enseignant-2.0">Cliquez ici </a>  pour vous accéder à votre tableau de bord.</p>
+    <p>Coordialement</p>
+</body>
+</html>

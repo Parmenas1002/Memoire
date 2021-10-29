@@ -1,0 +1,287 @@
+{% extends "comptes/dashEtudiant.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block self_css %}<link rel="stylesheet" href="{% static 'memoires/view.css' %}"> 
+<link rel="stylesheet" href="{% static 'memoires/viewStudent.css' %}"> 
+<link rel="stylesheet" href="{% static 'css/formulaire.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+{% endblock %}
+{% block title %}{{memoire.topic}}{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-dark mb-0" id="titre">Mémoire</h3>
+                {% if memoire.stateBefore == False %}
+                <a class="btn btn-primary" uk-toggle role="button" href="#qr-code"><i class="fas fa-qrcode fa-md text-white-50"></i>&nbsp;Générer le code QR</a>
+                
+                {%endif%}
+
+                {% if memoire.stateBefore == True %}
+                    {% if memoire.stateAfter == False %}
+                    <a class="btn btn-success" role="button" href=""><i class="fas fa-qrcode fa-md text-white-50"></i>&nbsp;Dépôt de mémoire validé</a>
+                    {% else %}
+                    <a class="btn btn-success" role="button" href=""><i class="fas fa-qrcode fa-md text-white-50"></i>&nbsp;Mémoire en ligne</a>
+                    {% endif %}
+                {% endif %}
+        </div>
+                
+    </div>
+
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-between ">
+            <div class="col-md-7">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="font-weight-bold m-0 text-center" id="titleCard">Général</h6>                        
+                    </div>
+                    <div class="card-body justify-content-center align-content-center" >
+                        <p> <span class="title">Thème</span>  : {{memoire.topic}} </p>
+                        <p ><span class="title">Année Académique</span>  : {{memoire.academicYear}} </p>
+                        <p><span class="title">Etudiants</span>  : {{memoire.etudiants}}</p>
+                        <p><span class="title">Superviseur</span>  : {{memoire.supervisor}}</p>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="font-weight-bold m-0 text-center" id="titleCard">Formation et Soutenance</h6>                        
+                    </div>
+                    <div class="card-body justify-content-center align-content-center" >
+                        <p><span class="title">Ecole</span> : {{memoire.filiere.entity.name}}</p>
+                        <p><span class="title">Filière</span> : {{memoire.filiere.name}}</p>
+                        <p><span class="title">Mention</span> :
+                            {% if memoire.mention == None %}
+                                Non définie
+                            {% else %}
+                                {{memoire.mention}}
+                            {% endif %}
+                        </p>
+
+                        <p><span class="title">Moyenne</span> :
+                            {% if memoire.middleClass == 0.0 %}
+                                Non définie
+                            {% else %}
+                                {{memoire.middleClass}}
+                            {% endif %}
+                        </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="font-weight-bold m-0 text-center" id="titleCard">Document du mémoire</h6>                        
+                    </div>
+                    <div class="card-body justify-content-center align-content-center" >
+                       
+                        <div class="text-center" id="document">
+                            <p><a href="{{memoire.document.url}}" class="link">Lire le document</a></p>
+                            <p class="mt-1"><a href="{{memoire.document.url}}" class="link" download>Télécharger le document</a></p>  
+                            {% if memoire.stateBefore == False %}
+                                <p class="mt-1 text-center" id="document"><a class="btn btn-secondary" uk-toggle role="button" href="#changeDoc" ><i class="fas fa-download fa-md text-white-50"></i>&nbsp;Modifier le document</a></p>         
+                            {% elif memoire.stateBefore == True and memoire.ckeckdate == False %} 
+                                <p class="mt-1 text-center" id="document"><a class="btn btn-secondary disabled" uk-toggle role="button" href="#changeDoc" aria-disabled="true"><i class="fas fa-download fa-md text-white-50"></i>&nbsp;Modifier le document</a></p>      
+                            {% elif memoire.ckeckdate == True and memoire.stateAfter == False %} 
+                                <p class="mt-1 text-center" id="document"><a class="btn btn-secondary " uk-toggle role="button" href="#changeDoc"><i class="fas fa-download fa-md text-white-50"></i>&nbsp;Modifier le document</a></p>
+                            {% elif memoire.ckeckdate == True and memoire.stateAfter == True  %} 
+                                <p class="mt-1 text-center" id="document"><a class="btn btn-secondary disabled" uk-toggle role="button" href="#changeDoc" aria-disabled="true"><i class="fas fa-download fa-md text-white-50"></i>&nbsp;Modifier le document</a></p>       
+                            {% endif%}
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="font-weight-bold m-0 text-center" id="titleCard">Résumé et Image de présentation</h6>                        
+                            </div>
+                            <div class="card-body justify-content-center align-content-center" id="formulaire">   
+                                {% if memoire.ckeckdate == None or memoire.ckeckdate == False %}
+                                    <p class="text-center">L'ajout du résumé et de l'image de présentation se fera après la soutenance de votre mémoire. </p>
+                                
+                                {% elif memoire.ckeckdate == True %}
+                                    {% if memoire.stateAfter == False %}
+                                    <p class="text-center">L'image et le résumé servent à mieux présenter votre mémoire en ligne.</p>
+                                    <form method="post" action="{% url 'viewStudent' memoire.code_memoire %}" enctype="multipart/form-data" >
+                                        {% csrf_token %}
+
+                                        {{ modifForm.presentationImage|as_crispy_field}}                   
+                                        {{ modifForm.abstract|as_crispy_field}} 
+
+                                        <div class="text-center">
+                                            <input type="submit" value="Enregistrer" id="submit" name="modif">
+                                        </div>
+                                    </form> 
+                                    {% else %}
+                                        <p class="text-center">Votre mémoire est déjà en ligne. Aucune modification n'est plus possible.</p>
+                                    {% endif%}
+                                {% endif %} 
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12 mt-3">                  
+                        {% if memoire.stateBefore == False %}
+                            <p class="mt-1 text-center" id="document"><a class="btn btn-danger" uk-toggle role = "button" href="#delete" ><i class="fas fa-trash fa-md text-white-50"></i>&nbsp; Supprimer ce dépôt mémoire</a></p>          
+                        {% endif%}
+                   
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    {% if memoire.checkSoutenance == True  %}
+        <div class="container-fluid d-md-none">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="font-weight-bold m-0 text-center" id="titleCard">Soutenance</h6>                        
+                        </div>
+                        <div class="card-body justify-content-center align-content-center" id="formulaire">   
+                            <p><span class="title">Jury</span> : N° {{memoire.get_soutenance.jury_number}}</p>
+                            <p><span class="title">Date et heure de la soutenance</span> : {{memoire.get_soutenance.date_planned.date}} à {{memoire.get_soutenance.date_planned.time}}</p>
+                            <p><span class="title">Salle de la souteance</span> : {{memoire.get_soutenance.place}} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+    <div class="container-fluid d-md-none">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="font-weight-bold m-0 text-center" id="titleCard">Soutenance</h6>                        
+                    </div>
+                    <div class="card-body justify-content-center align-content-center" id="formulaire">   
+                        <p class="text-center">En attente de planification</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div id="qr-code" class=" text-center" uk-modal >
+        <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="border-radius: 9px; border:4px solid">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <section id="card-radius" class="mt-3">               
+                    <div class="row justify-content-center align-content-center" id="add_comment">
+                        <div class="col-md-8" id="sortant">
+                            <h3 class="text-center">Votre Code e-Memoire</h3>
+                            <div class="uk-card uk-card-default uk-card-body card-radius-item text-center">
+                                <div class="text-center">
+                                    <img src="{{memoire.qr_code.url}}" alt="">
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+            </section>            
+        </div>
+    </div>
+
+    <div id="changeDoc" class=" text-center" uk-modal >
+        <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="border-radius: 9px; border:4px solid">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <section id="card-radius" class="mt-3">               
+                    <div class="row justify-content-center align-content-center" id="add_comment">
+                        <div class="col-md-10" id="sortant">
+                            <h3 class="text-center">Modifier votre document</h3>
+                            <div class="uk-card uk-card-default uk-card-body card-radius-item text-center">
+                                
+                                <form action="{% url 'viewStudent' memoire.code_memoire %}" id="formulaire" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}                    
+                            
+                                    <div class="form-group row  justify-content-center align-content-center">
+                                        <div class="col-sm-6 mb-3 mb-sm-0 text-center">{{ docForm.document|as_crispy_field}}</div> 
+                                    </div> 
+                                    {% if errorMessage != "" %}
+                                        <p class="errorMessage">{{errorMessage}}</p>
+                                    {% endif%} 
+                                    <div class="text-center">
+                                        <input type="submit" value="Enregistrer" id="submit" name = "changeDoc"> 
+                                    </div>                           
+                                                    
+                                </form>        
+                            </div>
+                        </div>
+                    </div>
+                    
+            </section>            
+        </div>
+    </div>
+    
+
+    <div id="delete" class=" text-center" uk-modal >
+        <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="border-radius: 9px; border:4px solid">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <section id="card-radius" class="mt-3">               
+                    <div class="row justify-content-center align-content-center" id="add_comment">
+                        <div class="col-md-8" id="sortant">
+                            <h3 class="text-center">Voulez-vous vraiment supprimer ce mémoire ?</h3>
+
+                            <form action="{% url 'viewStudent' memoire.code_memoire %}" id="formulaire" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}                    
+                                     
+                                <button class="btn btn-danger" type="submit" name="delete_yes">Oui</button>   
+                                <button class="btn btn-success" type="submit" name="delete_no">Non</button>                        
+                                                
+                            </form> 
+                            
+                        </div>
+                    </div>
+                    
+            </section>            
+        </div>
+    </div>
+
+    {% if errorMessage != "" %}
+        <p class="d-none" id="error">{{errorMessage}} </p>
+    {% endif%}
+    {% if successMesage != "" %}
+        
+        <p class="d-none" id="message">{{successMesage}} </p>
+    {% endif%}
+      
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+    <script>
+
+        
+        var errorMessage = document.getElementById("error")
+        if(errorMessage != null){
+            alertify.set('notifier', 'position','bottom-center')
+            alertify.error(errorMessage.innerHTML);
+        }
+        
+        var message = document.getElementById("message")
+        if(message != null){
+            alertify.set('notifier', 'position','bottom-center')
+            alertify.success(message.innerHTML);
+        }
+       
+    </script> 
+{%  endblock %}

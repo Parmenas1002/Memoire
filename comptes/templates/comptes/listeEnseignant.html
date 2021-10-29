@@ -1,0 +1,101 @@
+{% extends "comptes/dashAgent.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Liste des Enseignants{% endblock %}
+{% block self_css %}
+<link rel="stylesheet" href="{% static 'comptes/css/dashAgent.css' %}"> 
+{% endblock %}
+
+{% block nav_right_element %}  
+    <li class="nav-item" role="presentation"><a class="nav-link " href="{% url 'dashboardAgent' %}"><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link active" href="{% url 'listTeacher' %}"><i class="fas fa-list"></i><span>Liste des enseignants</span></a></li> 
+    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'listSoutenance' %}"><i class="fas fa-list"></i><span>Liste des soutenances</span></a></li>  
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="container-fluid pl-0 pr-0">
+        <div class="row mt-2 mb-2">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-dark mb-0 pl-5" id="titre"> Liste des enseignants</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mb-4">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Adresse mail</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher in teachers %}
+                            <tr>
+                                <td>{{teacher.last_name}}</td>
+                                <td>{{teacher.first_name}}</td>
+                                <td>{{teacher.user.email}}</td>
+                            </tr>
+                        {% endfor %}
+                    
+                    </tbody>
+                    
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable({
+                "searching":true,
+                "paging":true,
+                responsive: true,
+                dom: 'Bfrtip',
+                buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Liste des enseignants'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Liste des enseignants'
+                },
+
+                {
+                    extend: 'csvHtml5',
+                    title: 'Liste des enseignants'
+                }
+                ],
+                
+                "language":{
+                    "emptyTable": "Aucun enseignant",
+                    "infoEmpty": "Aucun enseignant ",
+                    "zeroRecords": "Aucun enseignant",
+                    "info": "Page _PAGE_ sur _PAGES_",
+                    "infoFiltered": "(Filtre sur _MAX_ mémoire (s))",
+                    "search" :"Rechercher  ",
+                    "paginate" :{
+                        "first":"Premier",
+                        "last" : "Dernier",
+                        "next" : "Suivant",
+                        "previous": "Précédent",
+                    }
+                }
+            });
+        } );
+
+        
+    </script> 
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'layouts/base.html'%}
+{% load static %}
+
+{% block self_css %} <link rel="stylesheet" href="{% static 'css/homeS.css' %}"> {% endblock%}
+{% block content %}
+    <div class="container mt-5" >
+        <div class="row align-content-center justify-content-center " id="slogan">
+            <div class="col-md-10">
+                <h3 class="text-center" >La digitalisation au coeur de nos Universités</h3>
+            </div>
+        </div>
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-9">
+                <p class="text-center">e-Memoire est une plateforme œuvrant pour la mise à disposition des mémoires en ligne et pour la numérisation 
+                    des toutes les actions entrant dans le cadre de la soutenance dans nos différentes universités. Nous contribuons donc à l’ambition du gouvernement du Bénin à renforcer 
+                    les services numériques dans les diverses couches estudiantines du pays.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-5 bg-light pt-4 pb-3">
+        <div class="row align-content-center justify-content-center " id="slogan">
+            <div class="col-md-10">
+                <h3 class="text-center mb-0" >Notre archive de mémoire</h3>
+                
+            </div>
+        </div>
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-4">
+                <p class="text-center mt-2">Nous disposons d'une archivage assez riche et diversifiée de travaux de fin d'études des étudiants.</p>
+                <p class="text-center"><button class="btn" id="view_more"><a href="{% url 'memoire_index' %}" id="services-link">Voir plus de mémoires</a></button></p>
+            </div>
+        </div>
+
+        
+    </div>
+    <div class="container mt-5">
+        <div class="row align-content-center justify-content-center ">
+            {% for memoire in memoires%}
+                <div class="col-md-5 mb-5"  >
+                    <div class="uk-card uk-card-default shadow" id="card">
+                        <div class="uk-card-media-top uk-cover-container">
+                            <img src="{{ memoire.presentationImage.url }}" alt="" width="100%" height="50%" uk-cover>
+                            <canvas width="550" height="310"></canvas>
+                        </div>
+                        <div class="uk-card-body pt-0">
+                            <h3 class="uk-card-title mt-3">{{memoire.topic}}</h3>
+                            <p  class="text-center mt-2 mb-4"> Réalisé par : <span class="student-memoire">{{memoire.etudiants }}</span></p>
+                            <p class="text-center"><a href="{% url 'viewPublic' memoire.code_memoire %}">Consulter</a></p>
+                        </div>
+                    </div>
+                    
+                </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+    
+    <div class="container-fluid bg-light mt-5 pt-5 pb-5" >
+        <div class="row align-content-center justify-content-center " id="slogan">
+            <div class="col-md-3 ">
+                <h3 class="text-center" >Toutes nos universités autour d'un même panel </h3>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6">
+                <p class="text-center mt-2">Nous impliquons tous les acteurs de la recherche scientifique dans nos universités. Etudiant, enseignant ou administration universitaire ; chaque acteur gagne en nous rejoignant. </p>
+                <p class="text-center"><button class="btn" id="view_more"><a href="{% url 'loginUser' %}" id="services-link">Nous rejoindre</a></button></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="services" >
+        <div class="container pt-5 pb-5" id="content-services">
+            <div class="row justify-content-center align-content-center">
+                <div class="col-md-10 text-center mt-3 mb-3">
+                    <h2>Tous nos services</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center align-content-center pb-5 pt-5 ">
+                <div class="col-md-3 mb-3 text-center">
+                    <span class="iconify" data-icon="mdi:archive-cog" data-inline="false" style="color: white;" width="50px"></span>
+                    <p class="mt-4 mb-2">Gestion de la période des soutenances</p>
+                </div>
+                <div class="col-md-3 mb-3 text-center">
+                    <span class="iconify" data-icon="mdi:archive" data-inline="false" style="color: white;" width="50px"></span>
+                    <p class="mt-4 mb-2">Archivage</p>
+                </div>
+
+                <div class="col-md-3 mb-3 text-center">
+                    <span class="iconify" data-icon="mdi:archive-search" data-inline="false" style="color: white;" width="50px"></span>
+                    <p class="mt-4 mb-2">Détection de plagiat</p>
+                </div>
+
+                <div class="col-md-3 mb-3 text-center">
+                    <span class="iconify" data-icon="mdi:archive-check" data-inline="false" style="color: white;" width="50px"></span>
+                    <p class="mt-4 mb-2"  >Mise à disposition de mémoires</p>
+                </div>
+            </div>
+                
+            
+        </div>
+    </div>
+
+{% endblock %}

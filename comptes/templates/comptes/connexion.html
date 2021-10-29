@@ -1,0 +1,69 @@
+{% extends 'layouts/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block self_title %}<title>e-Memoire Connexion</title>{% endblock %}
+{% block self_css %}
+
+<link rel="stylesheet" href="{% static 'css/formulaire.css' %}">
+
+<link rel="stylesheet" href=" https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"> 
+<link rel="stylesheet" href="{% static 'alertify/css/alertify.min.css' %}">
+<link rel="stylesheet" href="{% static 'alertify/css/themes/default.min.css' %}">
+
+{% endblock %}
+
+{% block header%}
+    <section id="top" class="d-flex align-items-center">
+        
+        <div class="container mt-5 justify-content-center align-content-center">
+            <div class="row justify-content-center align-content-center">
+                
+                <div class="col-md-6">
+                    <div class="card shadow py-2 bg-white" id="formulaire">
+                        
+                        <div class="card-body pt-3 pb-3">                                    
+                                <h4 class="para-center">Connexion</h4>
+                                <form method="post"  action="{% url 'loginUser' %}">
+                                    {% csrf_token %}
+                                    {{ form.username|as_crispy_field}}
+                                    {{ form.password|as_crispy_field}}
+                                    
+                                    <div class="text-center">
+                                        <input type="submit" value="Se connecter " id="submit">
+                                    </div>
+                                </form>  
+                                <div class="text-center mt-3"><a class="small" href="forgot-password.html">Mot de passe oublié?</a></div>
+                                <div class="text-center"><a class="small" href="{% url 'loginTeacher' %}">Vous êtes plutôt un enseignant ? Connectez vous.</a></div>
+                                <div class="text-center"><a class="small" href="{% url 'registerStudent' %}">Nouveau étudiant? Créer un compte</a></div>
+                                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    {% if errorMessage != "" %}
+        <p class="errorMessage d-none" id="error">{{errorMessage}} </p>
+    {% endif%}
+                                    
+    <script src="{% static 'alertify/alertify.min.js' %}"></script>
+
+    
+    <script>
+        var errorMessage = document.getElementById("error")
+        if(errorMessage != null){
+            alertify.set('notifier', 'position','bottom-center')
+            alertify.error(errorMessage.innerHTML);
+        }
+
+    </script>
+
+    
+{% endblock%}
+
+
+
+
+
